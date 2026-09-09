@@ -1,0 +1,23 @@
+<div class="page-background">
+  <div class="login-box">
+    <h1>Prijava</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input id="email" type="email" formControlName="email" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Lozinka:</label>
+        <input id="password" type="password" formControlName="password" />
+      </div>
+
+      <button type="submit" class="submit-btn">PRIJAVI SE</button>
+
+      <div class="register-option">
+        <a routerLink="/register">Nemate nalog? Registrujte se</a>
+      </div>
+    </form>
+  </div>
+</div>

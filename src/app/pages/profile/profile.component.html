@@ -1,0 +1,76 @@
+<div class="page-layout">
+  <nav class="top-navbar">
+    <div class="nav-section nav-left">
+      <button class="nav-item" routerLink="/homepage">PRODAVNICA</button>
+    </div>
+    <div class="nav-section nav-right">
+      <button class="nav-item" routerLink="/profile">PROFIL</button>
+      <button class="nav-item" routerLink="/cart">KORPA</button>
+      <button class="nav-item logout-item" (click)="onLogout()">
+        ODJAVI SE
+      </button>
+    </div>
+  </nav>
+
+  <div class="main-wrapper">
+    <div class="page-header">
+      <h1 class="page-title">MOJ PROFIL</h1>
+    </div>
+
+    <div class="profile-unified-container" *ngIf="user">
+      <div class="form-section">
+        <h2 class="section-title">IZMENA PODATAKA</h2>
+
+        <div class="info-grid">
+          <div class="field">
+            <label>Ime:</label>
+            <input
+              type="text"
+              [(ngModel)]="user.firstName"
+              class="custom-input"
+            />
+          </div>
+
+          <div class="field">
+            <label>Prezime:</label>
+            <input
+              type="text"
+              [(ngModel)]="user.lastName"
+              class="custom-input"
+            />
+          </div>
+
+          <div class="field">
+            <label>Email:</label>
+            <input
+              type="email"
+              [(ngModel)]="user.email"
+              disabled
+              class="custom-input disabled-input"
+            />
+          </div>
+
+          <div class="field">
+            <label>Telefon:</label>
+            <input type="text" [(ngModel)]="user.phone" class="custom-input" />
+          </div>
+
+          <div class="field full-width">
+            <label>Adresa:</label>
+            <input
+              type="text"
+              [(ngModel)]="user.address"
+              class="custom-input"
+            />
+          </div>
+        </div>
+
+        <div class="button-wrapper">
+          <button class="action-btn success-btn" (click)="saveChanges()">
+            Sačuvaj izmene
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

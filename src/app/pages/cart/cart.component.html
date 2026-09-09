@@ -1,0 +1,205 @@
+<div class="page-layout">
+  <nav class="top-navbar">
+    <div class="nav-section nav-left">
+      <button class="nav-item" routerLink="/homepage">PRODAVNICA</button>
+    </div>
+    <div class="nav-section nav-right">
+      <button class="nav-item" routerLink="/profile">PROFIL</button>
+      <button class="nav-item" routerLink="/cart">KORPA</button>
+      <button class="nav-item logout-item" (click)="onLogout()">
+        ODJAVI SE
+      </button>
+    </div>
+  </nav>
+
+  <div class="main-wrapper">
+    <div class="page-header">
+      <h1 class="page-title">MOJA KORPA</h1>
+      <span class="items-count">{{ filteredItems.length }} stavki</span>
+    </div>
+
+    <div class="cart-unified-container">
+      <aside class="sidebar-panel">
+        <h2 class="sidebar-title">PRETRAGA I FILTERI</h2>
+
+        <div class="filter-group">
+          <label>Pretraga</label>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+            placeholder="Pretraži po nazivu..."
+            class="custom-input"
+          />
+        </div>
+
+        <div class="filter-group">
+          <label>Tip igračke</label>
+          <select
+            [(ngModel)]="selectedType"
+            (change)="applyFilters()"
+            class="custom-select"
+          >
+            <option value="">Svi tipovi</option>
+            <option *ngFor="let t of toyTypes" [value]="t.typeId">
+              {{ t.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Ciljna grupa</label>
+          <select
+            [(ngModel)]="selectedTarget"
+            (change)="applyFilters()"
+            class="custom-select"
+          >
+            <option value="">Sve grupe</option>
+            <option value="dečak">Dečak</option>
+            <option value="devojčica">Devojčica</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Uzrast</label>
+          <select
+            [(ngModel)]="selectedAge"
+            (change)="applyFilters()"
+            class="custom-select"
+          >
+            <option value="">Svi uzrasti</option>
+            <option *ngFor="let a of ageGroups" [value]="a.ageGroupId">
+              {{ a.name }}
+            </option>
+          </select>
+        </div>
+      </aside>
+
+      <main class="content-panel">
+        <div
+          class="items-list"
+          *ngIf="filteredItems.length > 0; else emptyCart"
+        >
+          <div *ngFor="let item of filteredItems" class="cart-item-row">
+            <div class="item-media">
+              <img
+                [src]="'https://toy.pequla.com' + item.toyImage"
+                alt="Igračka"
+              />
+            </div>
+
+            <div class="item-details">
+              <h2 class="toy-title">{{ item.toyName }}</h2>
+              <div class="status-badge-container">
+                <span class="status-label">Status:</span>
+                <span [className]="'status-badge ' + item.status">
+                  {{
+                    item.status === "rezervisano"
+                      ? "REZERVISANO"
+                      : item.status === "pristiglo"
+                        ? "PRISTIGLO"
+                        : "OCENJENO"
+                  }}
+                </span>
+              </div>
+              <p class="price-text">{{ item.toyPrice }} RSD</p>
+            </div>
+
+            <div class="item-actions">
+              <button
+                *ngIf="item.status === 'rezervisano'"
+                class="action-btn success-btn"
+                (click)="changeStatus(item.id, 'pristiglo')"
+              >
+                Označi kao pristiglo
+              </button>
+
+              <button
+                *ngIf="item.status === 'rezervisano'"
+                class="action-btn warning-btn"
+                (click)="removeItem(item.id)"
+              >
+                Otkaži rezervaciju
+              </button>
+
+              <button
+                *ngIf="item.status === 'pristiglo'"
+                class="action-btn success-btn"
+                (click)="openRateModal(item)"
+              >
+                Oceni igračku
+              </button>
+
+              <button
+                *ngIf="item.status === 'pristiglo'"
+                class="action-btn warning-btn"
+                (click)="removeItem(item.id)"
+              >
+                Ukloni iz korpe
+              </button>
+
+              <button
+                *ngIf="item.status === 'ocenjeno'"
+                class="action-btn disabled-btn"
+                disabled
+              >
+                Hvala na oceni!
+              </button>
+            </div>
+          </div>
+
+          <div class="cart-footer-row">
+            <div class="total-box">
+              <span>Ukupna vrednost:</span>
+              <strong>{{ totalPrice }} RSD</strong>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyCart>
+          <div class="empty-cart-view">
+            <p>Trenutno nemate nijedan artikal u korpi.</p>
+            <button class="browse-btn" routerLink="/homepage">
+              PRETRAŽI KATALOG
+            </button>
+          </div>
+        </ng-template>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showRateModal">
+    <div class="rate-modal">
+      <h2>Oceni igračku: {{ selectedToyForRate?.toyName }}</h2>
+
+      <div class="star-selection">
+        <label>Ocena (1-5):</label>
+        <select [(ngModel)]="ratingValue" class="custom-select">
+          <option [ngValue]="5">5 - Odlično</option>
+          <option [ngValue]="4">4 - Dobro</option>
+          <option [ngValue]="3">3 - U redu</option>
+          <option [ngValue]="2">2 - Loše</option>
+          <option [ngValue]="1">1 - Vrlo loše</option>
+        </select>
+      </div>
+
+      <div class="comment-area">
+        <label>Vaš utisak:</label>
+        <textarea
+          [(ngModel)]="reviewComment"
+          placeholder="Napišite vaše mišljenje o ovoj igrački..."
+          class="custom-textarea"
+        ></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="action-btn warning-btn" (click)="showRateModal = false">
+          Odustani
+        </button>
+        <button class="action-btn success-btn" (click)="submitReview()">
+          Sačuvaj recenziju
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

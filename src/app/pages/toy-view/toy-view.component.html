@@ -1,0 +1,108 @@
+<div class="page-layout">
+  <nav class="top-navbar">
+    <div class="nav-section nav-left">
+      <button class="nav-item" routerLink="/homepage">PRODAVNICA</button>
+    </div>
+    <div class="nav-section nav-right">
+      <button class="nav-item" routerLink="/profile">PROFIL</button>
+      <button class="nav-item" routerLink="/cart">KORPA</button>
+      <button class="nav-item logout-item" (click)="onLogout()">
+        ODJAVI SE
+      </button>
+    </div>
+  </nav>
+
+  <div class="main-container" *ngIf="toy">
+    <div class="unified-card">
+      <div class="toy-main-grid">
+        <div class="toy-media">
+          <img
+            [src]="'https://toy.pequla.com' + toy.imageUrl"
+            [alt]="toy.name"
+          />
+        </div>
+
+        <div class="toy-details">
+          <h1 class="toy-title">{{ toy.name }}</h1>
+
+          <div class="rating-badge">
+            <span class="score"
+              >Prosečna ocena:
+              {{
+                toy.rating && toy.rating > 0 ? toy.rating : "Nema ocena"
+              }}</span
+            >
+          </div>
+
+          <p class="description">{{ toy.description }}</p>
+
+          <div class="specs-inline">
+            <div class="spec-inline-item">
+              <span class="label">Kategorija:</span>
+              <span class="value">{{ toy.type.name }}</span>
+            </div>
+            <div class="spec-inline-item">
+              <span class="label">Uzrast:</span>
+              <span class="value">{{ toy.ageGroup.name }} god.</span>
+            </div>
+            <div class="spec-inline-item">
+              <span class="label">Namenjeno za:</span>
+              <span class="value">{{ toy.targetGroup }}</span>
+            </div>
+            <div class="spec-inline-item">
+              <span class="label">Proizvedeno:</span>
+              <span class="value">{{
+                toy.productionDate | date: "dd.MM.yyyy."
+              }}</span>
+            </div>
+          </div>
+
+          <div class="purchase-action">
+            <span class="price-tag">{{ toy.price }} RSD</span>
+            <button class="reserve-button" (click)="onReserve()">
+              DODAJ U KORPU / REZERVIŠI
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="reviews-section">
+        <div class="reviews-header">
+          <h2>UTISCI I RECENZIJE KORISNIKA</h2>
+          <div class="review-search">
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              placeholder="Pretraži komentare..."
+              class="search-input"
+            />
+          </div>
+        </div>
+
+        <div
+          class="reviews-list"
+          *ngIf="filteredReviews.length > 0; else noReviews"
+        >
+          <div *ngFor="let r of filteredReviews" class="review-item">
+            <div class="review-info">
+              <span class="review-user">{{ r.user }}</span>
+              <span class="review-stars">Ocena: {{ r.rating }} / 5</span>
+            </div>
+            <p class="review-text">{{ r.comment }}</p>
+          </div>
+        </div>
+
+        <ng-template #noReviews>
+          <div class="reviews-placeholder">
+            <p *ngIf="searchTerm; else trueNoReviews">
+              Nema rezultata koji odgovaraju vašoj pretrazi.
+            </p>
+            <ng-template #trueNoReviews>
+              <p>Trenutno nema zabeleženih recenzija za ovaj artikal.</p>
+            </ng-template>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

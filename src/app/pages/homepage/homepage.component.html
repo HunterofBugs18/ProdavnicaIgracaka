@@ -1,0 +1,151 @@
+<div class="page-layout">
+  <nav class="top-navbar">
+    <div class="nav-section nav-left">
+      <button class="nav-item" routerLink="/homepage">PRODAVNICA</button>
+    </div>
+    <div class="nav-section nav-right">
+      <button class="nav-item" routerLink="/profile">PROFIL</button>
+      <button class="nav-item" routerLink="/cart">KORPA</button>
+      <button class="nav-item logout-item" (click)="onLogout()">
+        ODJAVI SE
+      </button>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <aside class="sidebar-filters">
+      <h3 class="filter-title">PRETRAGA</h3>
+
+      <div class="filter-box">
+        <label for="searchName">Naziv igračke:</label>
+        <input
+          id="searchName"
+          type="text"
+          class="sidebar-input"
+          placeholder="Naziv"
+          [(ngModel)]="searchCriteria.name"
+          (input)="applyFilters()"
+        />
+      </div>
+
+      <div class="filter-box">
+        <label for="searchDesc">Opis igračke:</label>
+        <input
+          id="searchDesc"
+          type="text"
+          class="sidebar-input"
+          placeholder="Opis"
+          [(ngModel)]="searchCriteria.description"
+          (input)="applyFilters()"
+        />
+      </div>
+
+      <div class="filter-box">
+        <label for="filterType">Kategorija:</label>
+        <select
+          id="filterType"
+          class="sidebar-input"
+          [(ngModel)]="searchCriteria.typeId"
+          (change)="applyFilters()"
+        >
+          <option value="">Sve kategorije</option>
+          <option *ngFor="let t of types" [value]="t.typeId">
+            {{ t.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-box">
+        <label for="filterAge">Uzrast:</label>
+        <select
+          id="filterAge"
+          class="sidebar-input"
+          [(ngModel)]="searchCriteria.ageGroupId"
+          (change)="applyFilters()"
+        >
+          <option value="">Svi uzrasti</option>
+          <option *ngFor="let a of ageGroups" [value]="a.ageGroupId">
+            {{ a.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-box">
+        <label for="filterTarget">Namenjeno za:</label>
+        <select
+          id="filterTarget"
+          class="sidebar-input"
+          [(ngModel)]="searchCriteria.targetGroup"
+          (change)="applyFilters()"
+        >
+          <option value="">Sve</option>
+          <option value="dečak">Dečak</option>
+          <option value="devojčica">Devojčica</option>
+        </select>
+      </div>
+
+      <div class="filter-box">
+        <label for="filterPrice">Maksimalna cena:</label>
+        <input
+          id="filterPrice"
+          type="number"
+          class="sidebar-input"
+          placeholder=""
+          [(ngModel)]="searchCriteria.maxPrice"
+          (input)="applyFilters()"
+        />
+      </div>
+
+      <div class="filter-box">
+        <label for="filterRating">Ocena:</label>
+        <select
+          id="filterRating"
+          class="sidebar-input"
+          [(ngModel)]="searchCriteria.minRating"
+          (change)="applyFilters()"
+        >
+          <option value="0">Sve ocene</option>
+          <option value="3">Ocena 3+</option>
+          <option value="4">Ocena 4+</option>
+          <option value="5">Ocena 5</option>
+        </select>
+      </div>
+
+      <div class="filter-box">
+        <label for="filterDate">Proizvedeno:</label>
+        <input
+          id="filterDate"
+          type="date"
+          class="sidebar-input"
+          [(ngModel)]="searchCriteria.dateAfter"
+          (change)="applyFilters()"
+        />
+      </div>
+    </aside>
+
+    <section class="catalog-section">
+      <div class="catalog-grid">
+        <div class="catalog-card" *ngFor="let toy of toys">
+          <div class="card-media">
+            <img
+              [src]="'https://toy.pequla.com' + toy.imageUrl"
+              [alt]="toy.name"
+            />
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">{{ toy.name }}</h4>
+            <span class="card-meta"
+              >{{ toy.type.name }} • {{ toy.ageGroup.name }} god.</span
+            >
+            <div class="card-footer">
+              <span class="price-text">{{ toy.price }} RSD</span>
+              <button class="view-btn" [routerLink]="['/toy', toy.toyId]">
+                DETALJNIJE
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

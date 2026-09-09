@@ -1,0 +1,56 @@
+<div class="page-background">
+  <div class="register-box">
+    <h1>Registracija</h1>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">Ime:</label>
+          <input id="firstName" type="text" formControlName="firstName" />
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Prezime:</label>
+          <input id="lastName" type="text" formControlName="lastName" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">E-mail:</label>
+          <input id="email" type="email" formControlName="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Broj telefona:</label>
+          <input id="phone" type="text" formControlName="phone" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Adresa:</label>
+        <input id="address" type="text" formControlName="address" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Lozinka:</label>
+        <input id="password" type="password" formControlName="password" />
+      </div>
+
+      <div class="form-group">
+        <label for="favoriteTypes">Omiljene igračke:</label>
+        <select id="favoriteTypes" formControlName="favoriteTypes" multiple>
+          <option *ngFor="let item of toyTypes" [value]="item.name">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">REGISTRUJ SE</button>
+
+      <div class="login-option">
+        <a routerLink="/login">Već imate nalog? Prijavite se</a>
+      </div>
+    </form>
+  </div>
+</div>
